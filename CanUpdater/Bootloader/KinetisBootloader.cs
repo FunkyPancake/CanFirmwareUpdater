@@ -5,9 +5,9 @@ namespace CanUpdater.Bootloader;
 public class KinetisBootloader
 {
     private readonly ILogger _logger;
-    private readonly TransportLayer _tp;
+    private readonly ITransportProtocol _tp;
 
-    public KinetisBootloader(ILogger logger, ICanDevice tp)
+    public KinetisBootloader(ILogger logger, ITransportProtocol tp)
     {
         _logger = logger;
         _tp = tp;
