@@ -49,13 +49,13 @@ internal class PacketWrapper {
         return false;
     }
 
-    public static bool ParsePingResponse(byte[] bytes, out byte[] payload) {
-        payload = Array.Empty<byte>();
+    public static bool ParsePingResponse(byte[] bytes, out byte[] response) {
+        response = Array.Empty<byte>();
         if (bytes.Length != 10 || bytes[0] != StartByte || bytes[1] != (byte)PacketType.PingResponse) {
             return false;
         }
 
-        payload = bytes[2..8];
+        response = bytes[2..8];
         var crc = bytes[8] + (bytes[9] << 8);
         return crc == CalcCrc(bytes[..8]);
     }

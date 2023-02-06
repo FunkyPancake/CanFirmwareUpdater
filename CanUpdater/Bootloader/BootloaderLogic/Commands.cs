@@ -46,12 +46,12 @@ internal class Commands {
         return false;
     }
 
-    public bool Ping(out PingResponse pingData) {
+    public bool Ping(out SoftwareVersion pingData) {
         pingData = null!;
         _tp.Send(PacketWrapper.BuildFramingPacket(PacketType.Ping));
         var status = PacketWrapper.ParsePingResponse(_tp.GetBytes(10), out var response);
         if (status) {
-            pingData = new PingResponse(response);
+            pingData = new SoftwareVersion(Major: response[2], Minor: response[1], Bugfix: response[0]);
         }
 
         return status;

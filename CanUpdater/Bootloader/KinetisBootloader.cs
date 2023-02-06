@@ -15,14 +15,6 @@ public class KinetisBootloader {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="Major"></param>
-    /// <param name="Minor"></param>
-    /// <param name="Bugfix"></param>
-    public record SoftwareVersion(int Major, int Minor, int Bugfix);
-
-    /// <summary>
-    /// 
-    /// </summary>
     public SoftwareVersion BootloaderVersion { get; private set; } = new(0, 0, 0);
 
     /// <summary>
@@ -40,12 +32,13 @@ public class KinetisBootloader {
     /// </summary>
     /// <returns></returns>
     public bool Connect() {
-        if (_commands.Ping(out var response) != true) {
+        if (_commands.Ping(out var version) != true) {
+            _isConnected = false;
             return false;
         }
+
         _logger.Information("Connection successful.");
-        BootloaderVersion =
-            new SoftwareVersion(Major: response.Major, Minor: response.Minor, Bugfix: response.Bugfix);
+        BootloaderVersion = version;
         _isConnected = true;
         return true;
     }
