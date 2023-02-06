@@ -1,108 +1,94 @@
+using CanUpdater.Bootloader.BootloaderLogic;
 using Serilog;
 
 namespace CanUpdater.Bootloader;
 
-public class KinetisBootloader
-{
+/// <summary>
+/// 
+/// </summary>
+public class KinetisBootloader {
     private readonly ILogger _logger;
-    private readonly ITransportProtocol _tp;
+    private readonly Commands _commands;
+    private bool _isConnected = false;
+    private bool _isFileLoaded = false;
 
-    public KinetisBootloader(ILogger logger, ITransportProtocol tp)
-    {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Major"></param>
+    /// <param name="Minor"></param>
+    /// <param name="Bugfix"></param>
+    public record SoftwareVersion(int Major, int Minor, int Bugfix);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public SoftwareVersion BootloaderVersion { get; private set; } = new(0, 0, 0);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="tp"></param>
+    public KinetisBootloader(ILogger logger, ITransportProtocol tp) {
         _logger = logger;
-        _tp = tp;
+        _commands = new Commands(tp);
     }
 
-    //Not supported when security enabled
-    public void Execute(uint jumpAddr, uint arg,uint stackPtrAddr)
-    {
-        
-        var cmd = new [] {jumpAddr, arg, stackPtrAddr};
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public bool Connect() {
+        if (_commands.Ping(out var response) != true) {
+            return false;
+        }
+        _logger.Information("Connection successful.");
+        BootloaderVersion =
+            new SoftwareVersion(Major: response.Major, Minor: response.Minor, Bugfix: response.Bugfix);
+        _isConnected = true;
+        return true;
     }
 
-    public void FLashEraseAll()
-    {
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Disconnect() {
     }
 
-    public void FlashEraseRegion()
-    {
+    /// <summary>
+    /// 
+    /// </summary>
+    public void GetSoftwareVersion() {
+        if (!_isConnected) {
+            _logger.Error("GetSoftwareVersion() - Target not connected.");
+            return;
+        }
     }
 
-    public void WriteMemory()
-    {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public bool Program() {
+        if (!_isConnected) {
+            _logger.Error("GetSoftwareVersion() - Target not connected.");
+            return false;
+        }
+
+        return true;
     }
 
-    public void ReadMemory()
-    {
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public bool Verify() {
+        if (!_isConnected) {
+            _logger.Error("GetSoftwareVersion() - Target not connected.");
+            return false;
+        }
 
-    //Supported when security enabled
-    public void FLashSecurityDisable()
-    {
+        return true;
     }
-
-    public void GetProperty()
-    {
-    }
-
-    public void Reset()
-    {
-        var cmd = new byte[] {0x0B, 0, 0};
-        
-            
-    }
-
-    public void SetProperty()
-    {
-    }
-
-    public void FlashEraseAllUnsecure()
-    {
-    }
-
-    // private bool SendCommandFull()
-    // {
-    //     Send(command);
-    //     if (WaitForAck() != Ok)
-    //     {
-    //         _logger.Error("Ack status failed.");
-    //         return false;
-    //     }
-    //     foreach (var dataPacket in outDataPacket)
-    //     {
-    //         Send(dataPacket);
-    //         if (WaitForAck() == kStatus_AbortDataPhase)
-    //             break;
-    //     }
-    //
-    //     WaitForResponse();
-    //     SendAck();
-    //     return true;
-    // }
-    //
-    // private CmdStatus SendCommand(Command command)
-    // {
-    //     Send(command);
-    //     return WaitForAck();
-    // }
-    //
-    // private byte WaitForResponse()
-    // {
-    //     
-    // }
-    //
-    // private void SendAck()
-    // {
-    //     _tp.SendFrame();
-    // }
-    //
-    // private void WaitForAck()
-    // {
-    //     _tp.GetFrame();
-    // }
-    //
-    // private void Send(object command)
-    // {
-    //     throw new NotImplementedException();
-    // }
 }

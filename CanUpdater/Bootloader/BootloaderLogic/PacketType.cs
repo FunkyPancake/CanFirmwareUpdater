@@ -1,6 +1,6 @@
-namespace CanUpdater.Bootloader;
+namespace CanUpdater.Bootloader.BootloaderLogic;
 
-public enum PacketType
+internal enum PacketType
 {
     Ack = 0xA1,
     Nak = 0xA2,

@@ -1,6 +1,6 @@
-namespace CanUpdater.Bootloader;
+namespace CanUpdater.Bootloader.BootloaderLogic;
 
-public enum Command
+internal enum Command
 {
     FlashEraseAll = 0x01,
     FlashEraseRegion = 0x02,
