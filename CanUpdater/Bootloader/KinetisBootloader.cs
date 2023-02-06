@@ -55,6 +55,7 @@ public class KinetisBootloader {
     /// 
     /// </summary>
     public void Disconnect() {
+        _commands.Reset();
         _isConnected = false;
     }
 

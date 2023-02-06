@@ -11,5 +11,5 @@ internal enum Command
     Execute = 0x09,
     Reset = 0x0B,
     SetProperty = 0x0C,
-    FlashEraseAllUnsecure = 0x0D
+    FlashEraseAllUnsecure = 0x0D,
 }
