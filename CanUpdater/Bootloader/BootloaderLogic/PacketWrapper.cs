@@ -4,6 +4,7 @@ namespace CanUpdater.Bootloader.BootloaderLogic;
 
 internal static class PacketWrapper {
     private const byte StartByte = 0x5A;
+    private const byte FramingPacketHeaderLen = 6;
 
     public static byte[] BuildFramingPacket(PacketType packetType, byte[]? payload = null) {
         var header = new List<byte> {
@@ -17,49 +18,64 @@ internal static class PacketWrapper {
         header.AddRange(new[] {(byte) (len & 0xff), (byte) ((len >> 8) & 0xff)});
         var dataForCrc = header.Concat(payload).ToArray();
         var crc = CalcCrc(dataForCrc);
-        var packet = new byte[6 + payload.Length];
+        var packet = new byte[FramingPacketHeaderLen + payload.Length];
         packet[4] = (byte) (crc & 0xff);
         packet[5] = (byte) ((crc >> 8) & 0xff);
         header.CopyTo(packet, 0);
-        payload.CopyTo(packet, 6);
+        payload.CopyTo(packet, FramingPacketHeaderLen);
         return packet.ToArray();
     }
 
-    public static byte[] BuildCommandPacket(Command commandType, byte flag, uint[] parameters) {
-        var len = parameters.Length;
+    public static byte[] BuildCommandPacket(CommandPacket command) {
+        var len = command.Parameters.Length;
         if (len > 7)
             throw new ArgumentException("Parameters array larger than 7");
         var commandPacket = new byte[4 + 4 * len];
-        var header = new byte[] {(byte) commandType, flag, 0, (byte) len};
+        var header = new byte[] {(byte) command.Type, (byte) (command.Flag ? 1 : 0), 0, (byte) len};
         header.CopyTo(commandPacket, 0);
         for (var i = 0; i < len; i++) {
-            var bytes = BitConverter.GetBytes(parameters[i]);
+            var bytes = BitConverter.GetBytes(command.Parameters[i]);
             bytes.CopyTo(commandPacket, 4 * i + 4);
         }
 
         return BuildFramingPacket(PacketType.Command, commandPacket);
     }
 
+    public static byte[] ParseFramingPacket(byte[] bytes) {
+        if (bytes[0] != StartByte)
+            throw new InvalidDataException();
 
-    public static bool ParseResponse(byte[] bytes, out byte[] payload) {
-        payload = Array.Empty<byte>();
-        if (bytes[0] != StartByte) {
-            return false;
+        var len = bytes[2] + (bytes[3] << 8);
+        var crc = bytes[4] + (bytes[5] << 8);
+        var arrayForCrcCalc = bytes[..4].Concat(bytes[6..]).ToArray();
+        var calcCrc = CalcCrc(arrayForCrcCalc);
+        if (len + FramingPacketHeaderLen != bytes.Length || calcCrc != crc) {
+            throw new InvalidDataException();
         }
 
-        switch ((ResponseType) bytes[1]) {
-            case ResponseType.Generic:
-                break;
-            case ResponseType.ReadMemory:
-                break;
-            case ResponseType.GetProperty:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        return false;
+        var payload = bytes[6..];
+        return payload;
     }
+
+    public static CommandPacket ParseCommandPacket(byte[] bytes) {
+        var command = new CommandPacket();
+        var response = ParseFramingPacket(bytes);
+
+        command.Type = (Command) response[0];
+        command.Flag = response[1] == 1;
+        var paramCount = response[3];
+        if ((response.Length - 4) / 4 != paramCount) {
+            throw new InvalidDataException();
+        }
+
+        command.Parameters = new uint[paramCount];
+        for (var i = 0; i < paramCount; i++) {
+            command.Parameters[i] = BitConverter.ToUInt32(response, 4 * i + 4);
+        }
+
+        return command;
+    }
+
 
     public static bool ParsePingResponse(byte[] bytes, out byte[] response) {
         response = Array.Empty<byte>();

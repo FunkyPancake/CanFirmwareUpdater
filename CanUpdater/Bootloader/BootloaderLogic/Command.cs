@@ -12,4 +12,7 @@ internal enum Command
     Reset = 0x0B,
     SetProperty = 0x0C,
     FlashEraseAllUnsecure = 0x0D,
+    ResponseGeneric = 0xA0,
+    ResponseReadMemory = 0xA3,
+    ResponseGetProperty = 0xA7
 }

@@ -1,5 +1,6 @@
 using System.Data;
 using System.Net.NetworkInformation;
+using Serilog;
 
 namespace CanUpdater.Bootloader.BootloaderLogic;
 
@@ -8,9 +9,11 @@ internal class Commands {
     private const int CommandTimeoutMs = 500;
 
     private const int AckTimeoutMs = 1000;
+    private readonly ILogger _logger;
     private readonly ITransportProtocol _tp;
 
-    public Commands(ITransportProtocol tp) {
+    public Commands(ILogger logger, ITransportProtocol tp) {
+        _logger = logger;
         _tp = tp;
     }
 
@@ -38,7 +41,10 @@ internal class Commands {
     }
 
     public void Reset() {
-        _tp.Send(PacketWrapper.BuildCommandPacket(Command.Reset, 0, Array.Empty<uint>()));
+        _tp.Send(PacketWrapper.BuildCommandPacket(new CommandPacket(Command.Reset, false, Array.Empty<uint>())));
+        GetAck();
+        GetResponseCode(PacketWrapper.ParseCommandPacket(_tp.GetBytes(18, 0)));
+        SendAck();
     }
 
     public void SetProperty() {
@@ -76,5 +82,9 @@ internal class Commands {
 
     private bool GetAck() {
         return PacketWrapper.ParseAck(_tp.GetBytes(2, AckTimeoutMs));
+    }
+
+    private ResponseCode GetResponseCode(CommandPacket response) {
+        return (ResponseCode) response.Parameters[0];
     }
 }
