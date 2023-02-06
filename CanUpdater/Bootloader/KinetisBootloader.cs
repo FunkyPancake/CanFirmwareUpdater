@@ -32,12 +32,20 @@ public class KinetisBootloader {
     /// </summary>
     /// <returns></returns>
     public bool Connect() {
-        if (_commands.Ping(out var version) != true) {
+        SoftwareVersion version;
+        try {
+            if (!_commands.Ping(out version)) {
+                _logger.Error("Cannot connect to the target.");
+            }
+        }
+        catch (CommandFailedException e) {
+            _logger.Error("Command failed, error {}", e.Message);
             _isConnected = false;
             return false;
         }
 
         _logger.Information("Connection successful.");
+        _logger.Information("Bootloader version = {}.{}.{}", version.Major, version.Minor, version.Bugfix);
         BootloaderVersion = version;
         _isConnected = true;
         return true;
@@ -47,6 +55,7 @@ public class KinetisBootloader {
     /// 
     /// </summary>
     public void Disconnect() {
+        _isConnected = false;
     }
 
     /// <summary>
