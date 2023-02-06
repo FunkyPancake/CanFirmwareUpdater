@@ -41,10 +41,7 @@ internal class Commands {
     }
 
     public void Reset() {
-        _tp.Send(PacketWrapper.BuildCommandPacket(new CommandPacket(Command.Reset, false, Array.Empty<uint>())));
-        GetAck();
-        GetResponseCode(PacketWrapper.ParseCommandPacket(_tp.GetBytes(18, 0)));
-        SendAck();
+        CommandNoData(new CommandPacket(Command.Reset, false, Array.Empty<uint>()));
     }
 
     public void SetProperty() {
@@ -68,11 +65,18 @@ internal class Commands {
         return status;
     }
 
-    private bool CommandNoData(CommandType commandType, byte[] bytes) {
-        _tp.Send(PacketWrapper.BuildFramingPacket(PacketType.Command));
+    private ResponseCode CommandNoData(CommandPacket command) {
+        _tp.Send(PacketWrapper.BuildCommandPacket(command));
         GetAck();
+        var response = PacketWrapper.ParseCommandPacket(_tp.GetBytes(18, 0));
+        if ((Command) response.Parameters[1] != command.Type) {
+            _logger.Error("Response command tag mismatch, request: {}response:{}", command.Type,
+                response.Parameters[1]);
+            return ResponseCode.Fail;
+        }
+
         SendAck();
-        return true;
+        return GetResponseCode(response);
     }
 
 

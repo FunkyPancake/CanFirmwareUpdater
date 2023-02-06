@@ -24,7 +24,7 @@ public class KinetisBootloader {
     /// <param name="tp"></param>
     public KinetisBootloader(ILogger logger, ITransportProtocol tp) {
         _logger = logger;
-        _commands = new Commands(tp);
+        _commands = new Commands(logger, tp);
     }
 
     /// <summary>
