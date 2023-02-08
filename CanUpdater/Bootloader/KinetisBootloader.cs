@@ -17,6 +17,8 @@ public class KinetisBootloader {
     /// </summary>
     public SoftwareVersion BootloaderVersion { get; private set; } = new(0, 0, 0);
 
+    public SoftwareVersion ApplicationVersion { get; private set; } = new(0, 0, 0);
+
     /// <summary>
     /// 
     /// </summary>
