@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanUpdater", "CanUpdater\Ca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelHex", "IntelHex\IntelHex.csproj", "{3D91A088-1328-4C71-ACE8-79AA34450CF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BootloaderTests", "BootloaderTests\BootloaderTests.csproj", "{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{3D91A088-1328-4C71-ACE8-79AA34450CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D91A088-1328-4C71-ACE8-79AA34450CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D91A088-1328-4C71-ACE8-79AA34450CF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
