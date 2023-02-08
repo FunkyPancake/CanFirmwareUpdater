@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanUpdaterCli", "CanUpdater
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanUpdater", "CanUpdater\CanUpdater.csproj", "{24B0B8B3-CA7C-41D9-91FA-7E8405AB6A6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelHex", "IntelHex\IntelHex.csproj", "{3D91A088-1328-4C71-ACE8-79AA34450CF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BootloaderTests", "BootloaderTests\BootloaderTests.csproj", "{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,7 +17,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B13539B4-58A2-4345-80F4-056EEBBE590C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B13539B4-58A2-4345-80F4-056EEBBE590C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B13539B4-58A2-4345-80F4-056EEBBE590C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B13539B4-58A2-4345-80F4-056EEBBE590C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AAEA0E65-2CCE-4309-A5F6-F380D42D0143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -24,5 +27,13 @@ Global
 		{24B0B8B3-CA7C-41D9-91FA-7E8405AB6A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B0B8B3-CA7C-41D9-91FA-7E8405AB6A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24B0B8B3-CA7C-41D9-91FA-7E8405AB6A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D91A088-1328-4C71-ACE8-79AA34450CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D91A088-1328-4C71-ACE8-79AA34450CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D91A088-1328-4C71-ACE8-79AA34450CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D91A088-1328-4C71-ACE8-79AA34450CF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7784EC2-33EC-43CD-AAF6-AF0AFE75C178}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
